@@ -15,12 +15,15 @@ def capture_spi_signals():
     print("🔍 SALEAE LOGIC ANALYZER - SPI CAPTURE")
     print("=" * 50)
     
-    # SPI Pin assignments for MIPE_EV1
-    print("📌 EXPECTED SPI PIN CONNECTIONS:")
-    print("  D0 → MOSI (P2.2)  - Data from MIPE_EV1 to LSM6DSO32")
-    print("  D1 → MISO (P2.4)  - Data from LSM6DSO32 to MIPE_EV1") 
-    print("  D2 → SCK  (P2.1)  - Clock signal")
-    print("  D3 → CS   (P2.5)  - Chip select (active low)")
+    # SPI Pin assignments for MIPE_EV1 - ACTUAL CONNECTIONS
+    print("📌 ACTUAL SALEAE CONNECTIONS:")
+    print("  D0 → CS   (P2.5)  - Chip select (active low)")
+    print("  D1 → CLK  (P2.1)  - Clock signal")
+    print("  D2 → MOSI (P2.2)  - Data from MIPE_EV1 to LSM6DSO32")
+    print("  D3 → MISO (P2.4)  - Data from LSM6DSO32 to MIPE_EV1") 
+    print("  D4 → VDD         - Power supply reference")
+    print("  D5 → P1.05       - Test pin (LED0 copy)")
+    print("  D6 → P1.06       - Test pin (LED1 copy)")
     print("")
     
     # Create captures directory
@@ -39,8 +42,8 @@ def capture_spi_signals():
             "C:\\Program Files\\sigrok\\sigrok-cli\\sigrok-cli.exe",
             "--driver", "saleae-logic16",
             "--time", "5s",  # 5 second capture
-            "--channels", "D0,D1,D2,D3",  # SPI channels
-            "--triggers", "D2=r",  # Trigger on rising edge of clock
+            "--channels", "D0,D1,D2,D3",  # CS, CLK, MOSI, MISO
+            "--triggers", "D1=r",  # Trigger on rising edge of clock (D1)
             "--output-format", "csv", 
             "--output-file", f"{capture_dir}/spi_capture_{timestamp}.csv"
         ]
@@ -65,14 +68,17 @@ def capture_spi_signals():
     print("")
     print("SETUP INSTRUCTIONS:")
     print("1. 📱 Open Saleae Logic software")
-    print("2. 🔌 Connect analyzer channels to MIPE_EV1:")
-    print("   - Channel 0 → P2.2  (MOSI)")
-    print("   - Channel 1 → P2.4  (MISO)")
-    print("   - Channel 2 → P2.1  (SCK)")
-    print("   - Channel 3 → P2.5  (CS)")
+    print("2. 🔌 Analyzer already connected to MIPE_EV1:")
+    print("   - D0 → P2.5  (CS)")
+    print("   - D1 → P2.1  (CLK)")
+    print("   - D2 → P2.2  (MOSI)")
+    print("   - D3 → P2.4  (MISO)")
+    print("   - D4 → VDD   (Power ref)")
+    print("   - D5 → P1.05 (Test pin)")
+    print("   - D6 → P1.06 (Test pin)")
     print("3. ⚙️  Set sample rate: 10 MHz or higher")
     print("4. ⏱️  Set capture time: 5-10 seconds")
-    print("5. 🎯 Set trigger: Rising edge on Channel 2 (SCK)")
+    print("5. 🎯 Set trigger: Rising edge on D1 (CLK)")
     print("6. ▶️  Start capture")
     print("7. 💾 Export as CSV to:", f"{capture_dir}/")
     print("")
