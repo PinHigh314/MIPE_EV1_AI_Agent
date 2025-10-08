@@ -1,4 +1,4 @@
-name: 🤖 AI Agent Cloud Compilation
+name: AI Agent Cloud Compilation
 
 on:
   push:
@@ -21,26 +21,26 @@ on:
 jobs:
   ai-cloud-compile:
     runs-on: ubuntu-latest
-    name: 🧠 AI Agent Cloud Compilation
+    name: AI Agent Cloud Compilation
     
     steps:
-    - name: 📦 Checkout Repository
+    - name: Checkout Repository
       uses: actions/checkout@v4
       
-    - name: 🐍 Setup Python
+    - name: Setup Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
         
-    - name: 📋 Install Dependencies
+    - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
         pip install pyyaml requests
         
-    - name: 🔍 AI Analysis - Detect Issues
+    - name: AI Analysis - Detect Issues
       id: ai_analysis
       run: |
-        echo "🤖 AI Agent analyzing codebase..."
+        echo "AI Agent analyzing codebase..."
         python3 << 'EOF'
         import os
         import json
@@ -54,9 +54,9 @@ jobs:
             with open('src/main.c', 'r') as f:
                 content = f.read()
                 if 'lsm6dso32' in content.lower():
-                    print("✅ SPI implementation detected")
+                    print("SPI implementation detected")
                     if 'DEVICE_DT_GET(DT_NODELABEL(spi00))' in content:
-                        print("✅ Using spi00 device")
+                        print("Using spi00 device")
                     else:
                         issues.append("Wrong SPI device reference")
                         fixes.append("Update to use spi00")
@@ -69,13 +69,13 @@ jobs:
             with open('boards/nordic/mipe_ev1/mipe_ev1_nrf54l15_cpuapp.dts', 'r') as f:
                 content = f.read()
                 if '&spi00' in content:
-                    print("✅ SPI device tree configuration found")
+                    print("SPI device tree configuration found")
                 else:
                     issues.append("Missing SPI device tree configuration")
                     fixes.append("Add spi00 device tree node")
                     
                 if 'pinctrl' in content:
-                    print("✅ Pinctrl configuration found")
+                    print("Pinctrl configuration found")
                 else:
                     issues.append("Missing pinctrl configuration")
                     fixes.append("Add SPI pinctrl configuration")
@@ -85,25 +85,25 @@ jobs:
             with open('prj.conf', 'r') as f:
                 content = f.read()
                 if 'CONFIG_SPI=y' in content:
-                    print("✅ SPI enabled in project config")
+                    print("SPI enabled in project config")
                 else:
                     issues.append("SPI not enabled")
                     fixes.append("Add CONFIG_SPI=y")
         
         # Output results
-        print(f"\n📊 AI Analysis Results:")
+        print(f"\nAI Analysis Results:")
         print(f"Issues found: {len(issues)}")
         print(f"Fixes needed: {len(fixes)}")
         
         if issues:
-            print("\n❌ Issues detected:")
+            print("\nIssues detected:")
             for i, issue in enumerate(issues):
                 print(f"  {i+1}. {issue}")
-            print("\n🔧 AI will generate fixes:")
+            print("\nAI will generate fixes:")
             for i, fix in enumerate(fixes):
                 print(f"  {i+1}. {fix}")
         else:
-            print("\n✅ No issues detected - code looks good!")
+            print("\nNo issues detected - code looks good!")
             
         # Set outputs for next steps
         with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
@@ -111,39 +111,39 @@ jobs:
             f.write(f"issues_count={len(issues)}\n")
         EOF
         
-    - name: 🔨 Simulate Nordic SDK Build
+    - name: Simulate Nordic SDK Build
       if: steps.ai_analysis.outputs.issues_found == 'false'
       run: |
-        echo "🔨 Simulating Nordic nRF Connect SDK build..."
-        echo "📋 Build Configuration:"
+        echo "Simulating Nordic nRF Connect SDK build..."
+        echo "Build Configuration:"
         echo "  Board: mipe_ev1_nrf54l15_cpuapp"
         echo "  SoC: nRF54L15"
         echo "  Features: GPIO + SPI + LSM6DSO32"
         echo ""
-        echo "✅ Simulated build successful!"
-        echo "📦 Generated artifacts:"
+        echo "Simulated build successful!"
+        echo "Generated artifacts:"
         echo "  - zephyr.hex (90KB)"
         echo "  - zephyr.elf (1MB)"
         echo ""
-        echo "🎯 Ready for hardware flashing!"
+        echo "Ready for hardware flashing!"
         
-    - name: 📊 Generate Compilation Report
+    - name: Generate Compilation Report
       run: |
         cat > compilation_report.md << 'EOF'
-        # 🤖 AI Agent Cloud Compilation Report
+        # AI Agent Cloud Compilation Report
         
         **Date:** $(date)
         **Target:** ${{ github.event.inputs.target_feature || 'Automatic' }}
         **Commit:** ${{ github.sha }}
         
-        ## 📋 Build Status
-        - ✅ Code analysis completed
-        - ✅ SPI implementation verified
-        - ✅ Device tree configuration checked
-        - ✅ Project configuration validated
-        - ✅ Cloud compilation simulated
+        ## Build Status
+        - Code analysis completed
+        - SPI implementation verified
+        - Device tree configuration checked
+        - Project configuration validated
+        - Cloud compilation simulated
         
-        ## 🎯 Next Steps for Hardware Testing
+        ## Next Steps for Hardware Testing
         
         ### 1. Flash Your MIPE_EV1
         ```bash
@@ -164,34 +164,34 @@ jobs:
         
         ### 3. Analyze Results
         The AI agent can analyze your capture files to:
-        - ✅ Detect timing issues
-        - ✅ Identify communication problems
-        - ✅ Generate automatic fixes
-        - ✅ Iterate until success
+        - Detect timing issues
+        - Identify communication problems
+        - Generate automatic fixes
+        - Iterate until success
         
-        ## 🚀 Autonomous Development Status
-        - **Hardware Ready:** ✅ MIPE_EV1 with SPI firmware
-        - **Logic Analyzer:** ✅ fx2lafw:conn=3.22 detected
-        - **AI Framework:** ✅ Ready for autonomous iteration
-        - **Cloud Compilation:** ✅ Working
+        ## Autonomous Development Status
+        - **Hardware Ready:** MIPE_EV1 with SPI firmware
+        - **Logic Analyzer:** fx2lafw:conn=3.22 detected
+        - **AI Framework:** Ready for autonomous iteration
+        - **Cloud Compilation:** Working
         
         ---
         *Generated by AI Agent Cloud Compilation System*
         EOF
         
-    - name: 📄 Upload Compilation Report
+    - name: Upload Compilation Report
       uses: actions/upload-artifact@v3
       with:
         name: ai-compilation-report
         path: compilation_report.md
         
-    - name: 🎉 Success Summary
+    - name: Success Summary
       run: |
-        echo "🎉 AI AGENT CLOUD COMPILATION COMPLETE!"
+        echo "AI AGENT CLOUD COMPILATION COMPLETE!"
         echo ""
-        echo "✅ Your code has been analyzed and validated in the cloud"
-        echo "✅ Ready for real hardware testing"
-        echo "✅ AI agent standing by for autonomous development"
+        echo "Your code has been analyzed and validated in the cloud"
+        echo "Ready for real hardware testing"
+        echo "AI agent standing by for autonomous development"
         echo ""
-        echo "🔗 Download the compilation report for next steps!"
-        echo "🚀 Your autonomous embedded development system is LIVE!"
+        echo "Download the compilation report for next steps!"
+        echo "Your autonomous embedded development system is LIVE!"
