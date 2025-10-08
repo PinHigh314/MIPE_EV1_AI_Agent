@@ -37,16 +37,26 @@ def show_status():
     
     print("\n🔍 LOGIC ANALYZER:")
     try:
+        # First check for Saleae devices specifically
         result = subprocess.run([
-            "C:\\Program Files\\sigrok\\sigrok-cli\\sigrok-cli.exe", 
-            "--scan"
+            'powershell', 
+            'Get-PnpDevice | Where-Object {$_.FriendlyName -like "*Saleae*" -or $_.FriendlyName -like "*Logic*"} | Select-Object FriendlyName'
         ], capture_output=True, text=True, timeout=10)
         
-        if "fx2lafw" in result.stdout:
-            print("  ✅ Logic analyzer detected (fx2lafw)")
+        if result.returncode == 0 and 'Saleae' in result.stdout:
+            print("  ✅ Saleae Logic Analyzer connected")
         else:
-            print("  ❌ Logic analyzer not detected")
-            print("  💡 Check USB connection and drivers")
+            # Fallback check with sigrok for FX2 devices
+            result = subprocess.run([
+                "C:\\Program Files\\sigrok\\sigrok-cli\\sigrok-cli.exe", 
+                "--scan"
+            ], capture_output=True, text=True, timeout=10)
+            
+            if "fx2lafw" in result.stdout:
+                print("  ✅ Logic analyzer detected (fx2lafw)")
+            else:
+                print("  ❌ Logic analyzer not detected")
+                print("  💡 Check USB connection and drivers")
     except Exception as e:
         print(f"  ❌ Logic analyzer check failed: {e}")
     
