@@ -180,7 +180,7 @@ jobs:
         EOF
         
     - name: Upload Compilation Report
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ai-compilation-report
         path: compilation_report.md
