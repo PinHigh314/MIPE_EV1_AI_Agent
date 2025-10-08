@@ -1,0 +1,6 @@
+board:
+  name: mipe_ev1
+  full_name: MIPE EV1 Board
+  vendor: custom
+  socs:
+    - name: nrf54l15

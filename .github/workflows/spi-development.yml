@@ -1,0 +1,69 @@
+name: "Automated SPI Development"
+
+on:
+  push:
+    paths: 
+      - 'src/**'
+      - 'boards/**'
+      - '*.conf'
+  workflow_dispatch:
+    inputs:
+      target_feature:
+        description: 'SPI Feature to implement (e.g., WHO_AM_I, basic_comms, sensor_read)'
+        required: true
+        default: 'WHO_AM_I'
+
+jobs:
+  ai-development-cycle:
+    runs-on: [self-hosted, windows, mipe-ev1-rig]
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        
+      - name: Setup Environment
+        run: |
+          echo "🚀 Starting AI Development Cycle"
+          echo "Target: ${{ github.event.inputs.target_feature || 'automated' }}"
+          
+      - name: Build Firmware
+        run: |
+          echo "🔨 Building firmware..."
+          ./build_and_flash.bat
+          
+      - name: Flash Hardware
+        run: |
+          echo "📡 Flashing to MIPE_EV1..."
+          # Flashing happens in build_and_flash.bat
+          
+      - name: Capture Hardware Signals
+        run: |
+          echo "📊 Capturing SPI signals..."
+          python scripts/analyzer_automation.py
+          
+      - name: Analyze Results
+        id: analysis
+        run: |
+          echo "🔍 Analyzing captured data..."
+          python scripts/ai_code_generator.py --analyze-results
+          
+      - name: Generate Next Iteration
+        if: steps.analysis.outputs.success != 'true'
+        run: |
+          echo "🤖 AI generating next code iteration..."
+          python scripts/ai_code_generator.py --generate-fix
+          
+      - name: Commit AI Changes
+        if: steps.analysis.outputs.success != 'true'
+        run: |
+          git config user.name "AI Development Agent"
+          git config user.email "ai-agent@mipe-ev1.local"
+          git add .
+          git commit -m "AI iteration: ${{ steps.analysis.outputs.iteration_description }}"
+          git push
+          
+      - name: Success Notification
+        if: steps.analysis.outputs.success == 'true'
+        run: |
+          echo "🎉 SPI Development Complete!"
+          echo "✅ Target achieved: ${{ github.event.inputs.target_feature }}"

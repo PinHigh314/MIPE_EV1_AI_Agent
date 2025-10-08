@@ -1,0 +1,27 @@
+# Build and temporary files
+build/
+compiled_code/*.hex
+!compiled_code/MIPE_EV1_M1_latest.hex
+
+# IDE files
+.vscode/settings.json
+.vscode/tasks.json
+
+# Analyzer captures
+analyzer_captures/*.sr
+analyzer_captures/*.csv
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+
+# OS files
+.DS_Store
+Thumbs.db

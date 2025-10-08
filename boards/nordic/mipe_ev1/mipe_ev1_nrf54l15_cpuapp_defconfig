@@ -1,0 +1,16 @@
+# Copyright (c) 2025
+# SPDX-License-Identifier: Apache-2.0
+
+# System Clock (32 MHz - revert to previously stable setting)
+CONFIG_SYS_CLOCK_HW_CYCLES_PER_SEC=32000000
+
+# Explicitly disable UART/console (no UART hardware on MIPE_EV1)
+CONFIG_SERIAL=n
+CONFIG_CONSOLE=n
+CONFIG_UART_CONSOLE=n
+
+# Enable GPIO
+CONFIG_GPIO=y
+
+# Enable MPU (matches working ev1_mipe project)
+CONFIG_ARM_MPU=y

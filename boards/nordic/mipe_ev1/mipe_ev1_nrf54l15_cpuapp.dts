@@ -1,0 +1,76 @@
+/*
+ * Copyright (c) 2025 MIPE_EV1 Project
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/dts-v1/;
+
+#include <nordic/nrf54l15_cpuapp.dtsi>
+
+/ {
+	model = "MIPE_EV1 Custom Board";
+	compatible = "mipe,mipe-ev1";
+
+	chosen {
+		zephyr,sram = &cpuapp_sram;
+		zephyr,flash = &cpuapp_rram;
+		zephyr,code-partition = &slot0_partition;
+	};
+
+	leds {
+		compatible = "gpio-leds";
+		led0: led_0 {
+			gpios = <&gpio0 0 GPIO_ACTIVE_HIGH>;
+			label = "LED 0";
+		};
+		led1: led_1 {
+			gpios = <&gpio0 1 GPIO_ACTIVE_HIGH>;
+			label = "LED 1";
+		};
+	};
+
+	test_pins {
+		compatible = "gpio-leds";
+		testpin05: test_pin_05 {
+			gpios = <&gpio1 5 GPIO_ACTIVE_HIGH>;
+			label = "Test Pin 05";
+		};
+		testpin06: test_pin_06 {
+			gpios = <&gpio1 6 GPIO_ACTIVE_HIGH>;
+		};
+	};
+
+	aliases {
+		led0 = &led0;
+		led1 = &led1;
+		testpin05 = &testpin05;
+		testpin06 = &testpin06;
+	};
+};
+
+/* Enable GPIO ports */
+&gpio0 {
+	status = "okay";
+};
+
+&gpio1 {
+	status = "okay";
+};
+
+/* Enable GPIOTE instances - REQUIRED for GPIO operations */
+&gpiote20 {
+	status = "okay";
+};
+
+&gpiote30 {
+	status = "okay";
+};
+
+/* Re-enable GRTC timer - minimal required configuration */
+&grtc {
+	owned-channels = <0>;
+	status = "okay";
+};
+
+/* Include partition configuration */
+#include <nordic/nrf54l15_partition.dtsi>

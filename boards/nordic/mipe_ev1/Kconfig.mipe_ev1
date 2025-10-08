@@ -1,0 +1,13 @@
+# Copyright (c) 2025
+# SPDX-License-Identifier: Apache-2.0
+
+config BOARD_MIPE_EV1
+	bool "MIPE EV1 Board"
+
+if BOARD_MIPE_EV1
+
+config BOARD_MIPE_EV1_NRF54L15_CPUAPP
+	bool "MIPE EV1 nRF54L15 CPU APP"
+	select SOC_NRF54L15_CPUAPP
+
+endif # BOARD_MIPE_EV1
