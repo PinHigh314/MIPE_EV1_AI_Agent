@@ -17,10 +17,10 @@ def capture_spi_signals():
     
     # SPI Pin assignments for MIPE_EV1
     print("📌 EXPECTED SPI PIN CONNECTIONS:")
-    print("  D0 → MOSI (P0.9)  - Data from MIPE_EV1 to LSM6DSO32")
-    print("  D1 → MISO (P0.11) - Data from LSM6DSO32 to MIPE_EV1") 
-    print("  D2 → SCK  (P0.8)  - Clock signal")
-    print("  D3 → CS   (P0.10) - Chip select (active low)")
+    print("  D0 → MOSI (P2.2)  - Data from MIPE_EV1 to LSM6DSO32")
+    print("  D1 → MISO (P2.4)  - Data from LSM6DSO32 to MIPE_EV1") 
+    print("  D2 → SCK  (P2.1)  - Clock signal")
+    print("  D3 → CS   (P2.5)  - Chip select (active low)")
     print("")
     
     # Create captures directory
@@ -66,10 +66,10 @@ def capture_spi_signals():
     print("SETUP INSTRUCTIONS:")
     print("1. 📱 Open Saleae Logic software")
     print("2. 🔌 Connect analyzer channels to MIPE_EV1:")
-    print("   - Channel 0 → P0.9  (MOSI)")
-    print("   - Channel 1 → P0.11 (MISO)")
-    print("   - Channel 2 → P0.8  (SCK)")
-    print("   - Channel 3 → P0.10 (CS)")
+    print("   - Channel 0 → P2.2  (MOSI)")
+    print("   - Channel 1 → P2.4  (MISO)")
+    print("   - Channel 2 → P2.1  (SCK)")
+    print("   - Channel 3 → P2.5  (CS)")
     print("3. ⚙️  Set sample rate: 10 MHz or higher")
     print("4. ⏱️  Set capture time: 5-10 seconds")
     print("5. 🎯 Set trigger: Rising edge on Channel 2 (SCK)")
