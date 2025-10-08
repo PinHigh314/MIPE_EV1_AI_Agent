@@ -30,8 +30,8 @@ static struct spi_config lsm6dso32_spi_cfg = {
 	.slave = 0,
 	.cs = {
 		.gpio = {
-			.port = DEVICE_DT_GET(DT_NODELABEL(gpio2)),
-			.pin = 5,
+			.port = DEVICE_DT_GET(DT_NODELABEL(gpio0)),
+			.pin = 16,  /* P2.05 = pin 16 */
 			.dt_flags = GPIO_ACTIVE_LOW
 		},
 		.delay = 1  /* CS setup time */
