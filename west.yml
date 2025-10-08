@@ -1,0 +1,34 @@
+manifest:
+  version: "0.13"
+
+  defaults:
+    remote: ncs
+
+  remotes:
+    - name: ncs
+      url-base: https://github.com/nrfconnect
+
+  projects:
+    - name: nrf
+      remote: ncs
+      path: nrf
+      revision: v2.8.0
+    - name: zephyr
+      remote: ncs
+      path: zephyr
+      revision: v3.7.99-ncs1
+    - name: mcuboot
+      remote: ncs
+      path: bootloader/mcuboot
+      revision: v2.1.0+ncs1
+    - name: nrfxlib
+      remote: ncs
+      path: nrfxlib
+      revision: v2.8.0
+    - name: trusted-firmware-m
+      remote: ncs
+      path: modules/tee/tf-m/trusted-firmware-m
+      revision: v2.0.0+ncs1
+
+  self:
+    path: mipe_ev1_app
