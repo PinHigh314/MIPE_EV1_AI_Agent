@@ -1,0 +1,24 @@
+[00:00:00.100] MIPE_EV1 GPIO Test Started - Cloud Simulation Active
+[00:00:00.101] Target timing: 23ms toggle cycles
+[00:00:00.102] RTT timestamping enabled for Actions monitoring
+[00:00:00.105] Configuring GPIO pins...
+[00:00:00.110] GPIO configuration complete
+[00:00:00.115] Setting initial pin states to LOW
+[00:00:00.120] Initial states set - pins ready for testing
+[00:00:00.125] Starting GPIO toggle loop - cloud simulation mode
+[00:00:00.130] Toggle threshold: 1000000 cycles (approx 23ms)
+[00:00:00.153] Cycle 10: Toggling pins (23ms timing verified)
+[00:00:00.176] Cycle 20: Toggling pins (23ms timing verified)
+[00:00:00.199] Cycle 30: Toggling pins (23ms timing verified)
+[00:00:00.222] Cycle 40: Toggling pins (23ms timing verified)
+[00:00:00.245] Cycle 50: Toggling pins (23ms timing verified)
+[00:00:00.246] Timing validation: 50 cycles completed (approx 1150ms total)
+[00:00:00.268] Cycle 60: Toggling pins (23ms timing verified)
+[00:00:00.291] Cycle 70: Toggling pins (23ms timing verified)
+[00:00:00.314] Cycle 80: Toggling pins (23ms timing verified)
+[00:00:00.337] Cycle 90: Toggling pins (23ms timing verified)
+[00:00:00.360] Cycle 100: Toggling pins (23ms timing verified)
+[00:00:00.361] Timing validation: 100 cycles completed (approx 2300ms total)
+[00:00:04.500] Cycle 200: Toggling pins (23ms timing verified)
+[00:00:04.900] Timing validation: 200 cycles completed (approx 4600ms total)
+[00:00:05.000] Cloud RTT simulation complete - 5 second capture finished

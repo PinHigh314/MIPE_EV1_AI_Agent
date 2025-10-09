@@ -43,7 +43,7 @@ jobs:
         run: |
           echo "=== CLOUD HARDWARE SIMULATION ==="
           echo "✅ Starting RTT monitoring simulation..."
-          python scripts/windows_rtt_monitor.py
+          python scripts/cloud_rtt_monitor.py
           echo "✅ 5-second capture completed"
           echo ""
           
