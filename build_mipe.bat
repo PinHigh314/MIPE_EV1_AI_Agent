@@ -37,14 +37,12 @@ echo.
 :: Check if CMakeLists.txt exists
 if not exist CMakeLists.txt (
     echo ERROR: CMakeLists.txt not found
-    pause
     exit /b 1
 )
 
 :: Check if custom board directory exists
 if not exist boards\nordic\mipe_ev1 (
     echo ERROR: Custom board directory not found!
-    pause
     exit /b 1
 )
 
@@ -67,7 +65,6 @@ cmake -B build -G Ninja -DBOARD=mipe_ev1/nrf54l15/cpuapp
 if %errorlevel% neq 0 (
     echo.
     echo CMake configuration failed!
-    pause
     exit /b 1
 )
 
@@ -82,7 +79,6 @@ ninja -C build
 if %errorlevel% neq 0 (
     echo.
     echo Build failed!
-    pause
     exit /b 1
 )
 
@@ -141,51 +137,9 @@ echo   5. TestPin06 pulses (200ms)
 echo   6. LED1 stays ON (test complete)
 echo.
 echo.
-echo Press any key to continue to flash prompt...
-pause >nul
 echo.
-
-:flash_prompt
-set flash_choice=
-set /p flash_choice="Flash the MIPE_EV1 device now? (Y/N): "
-
-if /i "%flash_choice%"=="Y" goto do_flash
-if /i "%flash_choice%"=="N" goto skip_flash
-echo Invalid choice. Please enter Y or N.
-goto flash_prompt
-
-:do_flash
+echo Build completed successfully!
 echo.
-echo Flashing device...
-nrfjprog --program build\zephyr\zephyr.hex --chiperase --verify -r
-
-if %errorlevel% equ 0 (
-    echo.
-    echo ========================================
-    echo Device flashed successfully!
-    echo ========================================
-    echo.
-    echo Watch your board for the LED sequence!
-) else (
-    echo.
-    echo ========================================
-    echo Flash failed! Please check:
-    echo ========================================
-    echo   - J-Link is connected (SWDIO, SWDCLK, VDD, GND)
-    echo   - Board is powered
-    echo   - nrfjprog is in your PATH
-    echo.
-    echo To manually flash later:
-    echo   nrfjprog --program build\zephyr\zephyr.hex --chiperase --verify -r
-)
-goto end
-
-:skip_flash
-echo.
-echo Skipping flash. To flash later, run:
+echo To flash manually, run:
 echo   nrfjprog --program build\zephyr\zephyr.hex --chiperase --verify -r
-
-:end
 echo.
-echo Press any key to exit...
-pause >nul

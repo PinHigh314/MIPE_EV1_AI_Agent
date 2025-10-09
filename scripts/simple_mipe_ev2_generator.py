@@ -252,12 +252,10 @@ ninja -C build
 
 if %errorlevel% neq 0 (
     echo Build failed!
-    pause
     exit /b 1
 )
 
 echo Build successful!
-pause
 '''
     
     with open(base_path / "build_mipe_ev2.bat", "w") as f:
@@ -283,13 +281,11 @@ nrfjprog --program build\\zephyr\\zephyr.hex --sectorerase --verify --reset
 
 if %errorlevel% neq 0 (
     echo Flash failed!
-    pause
     exit /b 1
 )
 
 echo MIPE_EV2 flashed successfully!
 echo Expected: 23ms toggle on P1.05/P1.06
-pause
 '''
     
     with open(base_path / "build_and_flash_ev2.bat", "w") as f:

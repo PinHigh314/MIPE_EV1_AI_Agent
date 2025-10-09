@@ -27,14 +27,12 @@ echo.
 :: Check if CMakeLists.txt exists
 if not exist CMakeLists.txt (
     echo ERROR: CMakeLists.txt not found
-    pause
     exit /b 1
 )
 
 :: Check if custom board directory exists
 if not exist boards\nordic\mipe_ev1 (
     echo ERROR: Custom board directory not found!
-    pause
     exit /b 1
 )
 
@@ -56,7 +54,6 @@ cmake -B build -G Ninja -DBOARD=mipe_ev1/nrf54l15/cpuapp
 if %errorlevel% neq 0 (
     echo.
     echo CMake configuration failed!
-    pause
     exit /b 1
 )
 
@@ -71,7 +68,6 @@ ninja -C build
 if %errorlevel% neq 0 (
     echo.
     echo Build failed!
-    pause
     exit /b 1
 )
 
@@ -125,4 +121,3 @@ if %errorlevel% equ 0 (
 )
 
 echo.
-pause
