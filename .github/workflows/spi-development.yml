@@ -14,56 +14,33 @@ on:
         default: 'WHO_AM_I'
 
 jobs:
-  ai-development-cycle:
+  run-firmware-and-log:
     runs-on: [self-hosted, windows, mipe-ev1-rig]
     
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
         
-      - name: Setup Environment
+      - name: Build and Flash Firmware
         run: |
-          echo "🚀 Starting AI Development Cycle"
-          echo "Target: ${{ github.event.inputs.target_feature || 'automated' }}"
-          
-      - name: Build Firmware
-        run: |
-          echo "🔨 Building firmware..."
+          echo "Building and flashing firmware..."
           ./build_and_flash.bat
           
-      - name: Flash Hardware
+      - name: Log Hardware Activity
         run: |
-          echo "📡 Flashing to MIPE_EV1..."
-          # Flashing happens in build_and_flash.bat
+          echo "Starting 5-second hardware logging..."
+          python scripts/windows_rtt_monitor.py
           
-      - name: Capture Hardware Signals
-        run: |
-          echo "📊 Capturing SPI signals..."
-          python scripts/analyzer_automation.py
+      - name: Upload Logs
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: hardware-logs-${{ github.run_number }}
+          path: |
+            rtt_logs/
+            build/zephyr/zephyr.hex
+          retention-days: 30
           
-      - name: Analyze Results
-        id: analysis
-        run: |
-          echo "🔍 Analyzing captured data..."
-          python scripts/ai_code_generator.py --analyze-results
-          
-      - name: Generate Next Iteration
-        if: steps.analysis.outputs.success != 'true'
-        run: |
-          echo "🤖 AI generating next code iteration..."
-          python scripts/ai_code_generator.py --generate-fix
-          
-      - name: Commit AI Changes
-        if: steps.analysis.outputs.success != 'true'
-        run: |
-          git config user.name "AI Development Agent"
-          git config user.email "ai-agent@mipe-ev1.local"
-          git add .
-          git commit -m "AI iteration: ${{ steps.analysis.outputs.iteration_description }}"
-          git push
-          
-      - name: Success Notification
-        if: steps.analysis.outputs.success == 'true'
-        run: |
-          echo "🎉 SPI Development Complete!"
-          echo "✅ Target achieved: ${{ github.event.inputs.target_feature }}"
+      - name: Show Firmware Output
+        run: python scripts/simple_log_viewer.py
+        if: always()

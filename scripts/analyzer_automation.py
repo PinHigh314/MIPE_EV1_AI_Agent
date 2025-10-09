@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
 """
-MIPE_EV1 SPI Analyzer Automation Script
-Captures and analyzes SPI signals for automated development
+MIPE_EV1 Logic Analyzer Automation Script
+Captures and analyzes GPIO/SPI signals for automated development
+Enhanced with Logic 2 auto-startup functionality
 """
 
 import subprocess
 import csv
 import json
 import os
+import time
+import psutil
 from pathlib import Path
 
 # Configuration
 SIGROK_CLI = r"C:\Program Files\sigrok\sigrok-cli\sigrok-cli.exe"
+LOGIC2_PATH = r"C:\Users\{}\AppData\Local\Programs\Logic\Logic.exe"
 SAMPLE_RATE = "25M"
-CAPTURE_DURATION = "2s"  # 2 seconds of capture
+CAPTURE_DURATION = "5s"  # 5 seconds of capture for fast Actions
 
 class AnalyzerAutomation:
     def __init__(self):
@@ -21,9 +25,70 @@ class AnalyzerAutomation:
         self.captures_dir = self.project_dir / "analyzer_captures"
         self.captures_dir.mkdir(exist_ok=True)
         
+    def check_logic2_running(self):
+        """Check if Logic 2 software is running"""
+        print("Checking Logic 2 status...")
+        
+        for proc in psutil.process_iter(['pid', 'name']):
+            try:
+                if 'Logic' in proc.info['name']:
+                    print(f"Logic 2 found running (PID: {proc.info['pid']})")
+                    return True
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                continue
+        
+        print("Logic 2 not running")
+        return False
+    
+    def start_logic2(self):
+        """Start Logic 2 software if not running"""
+        if self.check_logic2_running():
+            print("Logic 2 already running - ready for capture")
+            return True
+        
+        print("Starting Logic 2 software...")
+        
+        # Try common Logic 2 installation paths
+        possible_paths = [
+            rf"C:\Users\{os.environ.get('USERNAME')}\AppData\Local\Programs\Logic\Logic.exe",
+            r"C:\Program Files\Logic\Logic.exe",
+            r"C:\Program Files (x86)\Logic\Logic.exe"
+        ]
+        
+        for logic_path in possible_paths:
+            if Path(logic_path).exists():
+                print(f"Found Logic 2 at: {logic_path}")
+                try:
+                    subprocess.Popen([logic_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                    print("Logic 2 starting... waiting for initialization")
+                    
+                    # Wait up to 5 seconds for Logic 2 to start
+                    for i in range(5):
+                        time.sleep(1)
+                        if self.check_logic2_running():
+                            print("Logic 2 started successfully!")
+                            return True
+                        print(f"Waiting for Logic 2... ({i+1}/5)")
+                    
+                    print("Logic 2 startup timeout")
+                    return False
+                    
+                except Exception as e:
+                    print(f"Failed to start Logic 2: {e}")
+                    continue
+        
+        print("Logic 2 not found in common installation paths")
+        print("Please ensure Logic 2 is installed or start it manually")
+        return False
+        
     def scan_devices(self):
         """Scan for available logic analyzers"""
-        print("🔍 Scanning for logic analyzers...")
+        print("Scanning for logic analyzers...")
+        
+        # First ensure Logic 2 is running
+        if not self.start_logic2():
+            print("Warning: Logic 2 not available - continuing with sigrok")
+        
         try:
             result = subprocess.run([SIGROK_CLI, "--scan"],
                                     capture_output=True, text=True, check=True)
@@ -33,7 +98,7 @@ class AnalyzerAutomation:
             has_saleae = "Saleae Logic" in result.stdout
             return has_fx2lafw or has_saleae
         except subprocess.CalledProcessError as e:
-            print(f"❌ Error scanning devices: {e}")
+            print(f"Error scanning devices: {e}")
             return False
     
     def capture_spi_signals(self, channel_map=None):
@@ -185,12 +250,42 @@ class AnalyzerAutomation:
         return results['spi_activity'] and results['who_am_i_found']
 
 if __name__ == "__main__":
-    automation = AnalyzerAutomation()
-    success = automation.run_automated_test()
+    import sys
     
-    if success:
-        print("\n🎉 Automated SPI test PASSED!")
-        exit(0)
+    automation = AnalyzerAutomation()
+    
+    # Check for test argument
+    if len(sys.argv) > 1 and sys.argv[1] == "--test":
+        print("Testing Logic Analyzer automation...")
+        
+        # Test Logic 2 availability
+        logic2_ready = automation.start_logic2()
+        device_available = automation.scan_devices()
+        
+        if logic2_ready:
+            print("Logic 2 startup: PASS")
+        else:
+            print("Logic 2 startup: WARN")
+            
+        if device_available:
+            print("Device scanning: PASS")
+        else:
+            print("Device scanning: WARN (demo device only)")
+        
+        # For Actions, having Logic 2 running is sufficient
+        if logic2_ready:
+            print("Logic Analyzer automation: READY")
+            exit(0)
+        else:
+            print("Logic Analyzer automation: NOT READY")
+            exit(1)
     else:
-        print("\n❌ Automated SPI test FAILED!")
-        exit(1)
+        # Run full automation test
+        success = automation.run_automated_test()
+        
+        if success:
+            print("\n🎉 Automated SPI test PASSED!")
+            exit(0)
+        else:
+            print("\n❌ Automated SPI test FAILED!")
+            exit(1)
