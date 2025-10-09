@@ -15,7 +15,7 @@ on:
 
 jobs:
   run-firmware-and-log:
-    runs-on: [self-hosted, windows, mipe-ev1-rig]
+    runs-on: windows-latest  # Temporary: use cloud runner for immediate testing
     
     steps:
       - name: Checkout Code
