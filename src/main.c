@@ -1,5 +1,5 @@
 /**
- * MIPE_EV1 Test - Cloud Runner Testing
+ * MIPE_EV1 Cloud Testing - Optimized Workflow
  * Testing simplified automation: run firmware and log it
  * Proven 23ms timing pattern from MIPE_EV1
  * RTT Hardware Monitoring Integration
