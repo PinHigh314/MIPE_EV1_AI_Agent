@@ -7,13 +7,13 @@
 
 ## Setup Instructions
 
-### 1. Create GitHub Repository ✅ COMPLETED
+### 1. Create GitHub Repository
 ```bash
-# Repository is already live at:
-# https://github.com/PinHigh314/MIPE_EV1_AI_Agent
-
-# Verify connection:
-git remote -v
+# In your MIPE_EV1 directory
+git add .
+git commit -m "Initial MIPE_EV1 project with AI automation"
+git remote add origin https://github.com/YOUR_USERNAME/MIPE_EV1.git
+git push -u origin main
 ```
 
 ### 2. Install GitHub Actions Runner

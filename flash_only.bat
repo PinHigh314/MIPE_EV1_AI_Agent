@@ -10,6 +10,7 @@ REM Check if build exists
 if not exist "build\zephyr\zephyr.hex" (
     echo ERROR: No build found!
     echo Run build_and_flash.bat or build_only.bat first
+    pause
     exit /b 1
 )
 
@@ -28,3 +29,5 @@ if %errorlevel% equ 0 (
     echo Try: nrfjprog --recover
     echo.
 )
+
+pause
