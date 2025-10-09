@@ -1,0 +1,3 @@
+config BOARD_MIPE_EV2_NRF54L15_CPUAPP
+	bool "MIPE_EV2 nRF54L15 Application MCU"
+	depends on SOC_NRF54L15_CPUAPP

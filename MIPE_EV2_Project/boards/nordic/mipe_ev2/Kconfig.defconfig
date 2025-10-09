@@ -1,0 +1,6 @@
+if BOARD_MIPE_EV2_NRF54L15_CPUAPP
+
+config BOARD
+	default "mipe_ev2_nrf54l15_cpuapp"
+
+endif # BOARD_MIPE_EV2_NRF54L15_CPUAPP

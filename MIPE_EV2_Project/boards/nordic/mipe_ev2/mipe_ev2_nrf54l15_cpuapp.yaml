@@ -1,0 +1,16 @@
+identifier: mipe_ev2_nrf54l15_cpuapp
+name: MIPE_EV2_nRF54L15_CPUAPP
+type: mcu
+arch: arm
+toolchain:
+  - zephyr
+  - gnuarmemb
+  - xtools
+ram: 256
+flash: 1536
+supported:
+  - gpio
+  - i2c
+  - spi
+  - watchdog
+  - counter
