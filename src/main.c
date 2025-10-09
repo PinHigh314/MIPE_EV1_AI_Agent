@@ -1,5 +1,6 @@
 /**
- * MIPE_EV2 Test - GPIO Test  
+ * MIPE_EV1 Test - Cloud Runner Testing
+ * Testing simplified automation: run firmware and log it
  * Proven 23ms timing pattern from MIPE_EV1
  * RTT Hardware Monitoring Integration
  */
