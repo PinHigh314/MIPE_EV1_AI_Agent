@@ -1,0 +1,42 @@
+name: Build and Flash (Development)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-flash:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install build dependencies
+        run: |
+          pip install -r requirements.txt || echo "No requirements.txt found"
+
+      - name: Build firmware
+        run: |
+          if exist build_mipe.bat (
+            call build_mipe.bat
+          ) else (
+            echo "No build_mipe.bat found. Skipping build."
+          )
+
+      - name: Flash firmware (simulated)
+        run: |
+          echo "Flashing would occur here if hardware was connected."
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled_code
+          path: compiled_code/*.hex
+        if: success()

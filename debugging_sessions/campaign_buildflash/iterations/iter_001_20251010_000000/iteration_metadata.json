@@ -1,0 +1,17 @@
+{
+  "iteration_info": {
+    "campaign_name": "buildflash",
+    "iteration_number": 1,
+    "iteration_id": "iter_001_20251010_000000",
+    "description": "Initial build/flash development cycle.",
+    "timestamp": "20251010_000000",
+    "date": "2025-10-10",
+    "time": "00:00:00"
+  },
+  "test_execution": {
+    "test_status": "planned",
+    "rtt_captures": [],
+    "logic2_captures": [],
+    "findings": []
+  }
+}

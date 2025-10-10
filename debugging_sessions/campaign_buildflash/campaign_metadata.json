@@ -1,0 +1,15 @@
+{
+  "campaign_info": {
+    "name": "BuildFlash",
+    "clean_name": "buildflash",
+    "description": "Development iteration for repeated build and flash cycles. Objective: Adjust code as required, build it, and flash it until successful.",
+    "created_date": "2025-10-10",
+    "created_time": "00:00:00",
+    "total_iterations": 1
+  },
+  "test_parameters": {
+    "hardware_setup": "MIPE_EV1",
+    "test_conditions": ["Build and flash until success"],
+    "expected_outcomes": ["Code builds and flashes without error"]
+  }
+}
